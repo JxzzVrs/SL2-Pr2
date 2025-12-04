@@ -1,0 +1,139 @@
+@page "/artistas"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Artistas</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold m-0" style="color: var(--text-main);">Artistas</h2>
+        <small class="text-muted">Catálogo de bandas e intérpretes</small>
+    </div>
+    <a class="btn btn-primary rounded-pill px-4" href="/artistas/nuevo">
+        <i class="bi bi-plus-lg me-2"></i>Nuevo Artista
+    </a>
+</div>
+
+@if (artistas == null)
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Cargando catálogo...</p>
+    </div>
+}
+else if (artistas.Length == 0)
+{
+    <div class="alert alert-secondary border-0" style="background-color: var(--bg-card);">
+        <i class="bi bi-info-circle me-2"></i> No hay artistas registrados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" style="border-collapse: separate; border-spacing: 0;">
+            <thead>
+                <tr class="text-uppercase text-muted small border-bottom-0">
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Nacionalidad</th>
+                    <th scope="col">Género</th>
+                    <th scope="col" class="text-end pe-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var artista in artistas)
+                {
+                    <tr class="artist-row">
+                        <td>
+                            <span class="fw-bold text-white">@artista.Nombre</span>
+                        </td>
+                        <td class="text-muted">@(artista.Nacionalidad ?? "-")</td>
+                        <td class="text-muted">
+                            @if (!string.IsNullOrEmpty(artista.GeneroPrincipal))
+                            {
+                                <span class="badge" style="background-color: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-muted);">
+                                    @artista.GeneroPrincipal
+                                </span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        
+                        <td class="text-end pe-3">
+                            <div class="btn-group">
+                                <button class="btn btn-icon" title="Ver Detalle" @onclick="() => VerArtista(artista.Id)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-icon" title="Editar" @onclick="() => EditarArtista(artista.Id)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-icon text-danger" title="Eliminar" @onclick="() => EliminarArtista(artista.Id)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<style>
+    /* Estilos Locales para esta página */
+    .artist-row {
+        transition: background-color 0.2s;
+        border-radius: 4px;
+    }
+    .artist-row:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .btn-icon {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        transition: all 0.2s;
+        padding: 0.25rem 0.5rem;
+        font-size: 1.1rem;
+    }
+    .btn-icon:hover {
+        color: var(--text-main);
+        transform: scale(1.1);
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 50%;
+    }
+    .btn-icon.text-danger:hover {
+        color: #ef4444 !important;
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+</style>
+
+@code {
+    private Artista[]? artistas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadArtistas();
+    }
+
+    private async Task LoadArtistas()
+    {
+        try
+        {
+            // URL correcta (sin /api)
+            artistas = await HttpClient.GetFromJsonAsync<Artista[]>("http://localhost:5126/artistas");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+    
+    private void VerArtista(int id) => NavigationManager.NavigateTo($"/artistas/{id}");
+    private void EditarArtista(int id) => NavigationManager.NavigateTo($"/artistas/editar/{id}");
+    private void EliminarArtista(int id) => NavigationManager.NavigateTo($"/artistas/eliminar/{id}");
+}

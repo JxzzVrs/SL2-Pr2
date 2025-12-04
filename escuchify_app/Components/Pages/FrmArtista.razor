@@ -1,0 +1,111 @@
+@page "/artistas/nuevo"
+@page "/artistas/editar/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+
+<PageTitle>@(Id == 0 ? "Nuevo Artista" : "Editar Artista")</PageTitle>
+    
+<h1>@(Id == 0 ? "Crear Nuevo Artista" : "Editar Artista")</h1>
+
+@if (artista == null)
+{
+    <p><em>Cargando formulario...</em></p>
+}
+else
+{
+     <EditForm Model="artista" onSubmit="GuardarArtista" FormName="artistaForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <InputText id="nombre" class="form-control" @bind-Value="artista.Nombre" />
+        </div>
+
+        <div class="mb-3">
+            <label for="nacionalidad" class="form-label">Nacionalidad</label>
+            <InputText id="nacionalidad" class="form-control" @bind-Value="artista.Nacionalidad" />
+        </div>
+
+        <div class="mb-3">
+            <label for="genero" class="form-label">Género Principal</label>
+            <InputText id="genero" class="form-control" @bind-Value="artista.GeneroPrincipal" />
+        </div>
+
+        <div class="mb-3">
+            <label for="biografia" class="form-label">Biografía</label>
+            <InputText id="biografia" class="form-control" @bind-Value="artista.Biografia" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+        </div>
+        
+    </EditForm> 
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+
+    // Usamos el modelo Artista del frontend
+    private Artista artista { get; set; } = new Artista();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Si Id es > 0, estamos editando, por lo tanto cargamos el artista
+        if (Id > 0)
+        {
+            // Llama al endpoint GET ONE
+            artista = await HttpClient.GetFromJsonAsync<Artista>($"http://localhost:5126/artistas/{Id}") 
+                ?? new Artista();
+        }
+    }
+
+private async Task GuardarArtista()
+    {
+        Console.WriteLine("--- INTENTO DE GUARDADO ---");
+
+        HttpResponseMessage response;
+
+        // IMPORTANTE: Asegúrate de que esta URL coincida con tu API
+        // A veces la barra al final "/" causa error 400, así que la quitamos por seguridad
+        string urlBase = "http://localhost:5126/artistas"; 
+
+        if (Id == 0)
+        {
+            Console.WriteLine($"Enviando POST (Nuevo) a: {urlBase}");
+            response = await HttpClient.PostAsJsonAsync(urlBase, artista);
+        }
+        else
+        {
+            Console.WriteLine($"Enviando PUT (Editar) a: {urlBase}/{Id}");
+            response = await HttpClient.PutAsJsonAsync($"{urlBase}/{Id}", artista);
+        }
+
+        // AQUÍ ESTÁ LA MAGIA PARA VER EL ERROR
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("¡ÉXITO! Guardado correctamente.");
+            NavigationManager.NavigateTo("/artistas");
+        }
+        else
+        {
+            // Esto lee el mensaje oculto que manda la API
+            var errorDetallado = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine($"❌ ERROR {response.StatusCode}:");
+            Console.WriteLine($"MENSAJE: {errorDetallado}");
+            Console.WriteLine("------------------------------------------------");
+        }
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo(uri: "/artistas");
+    }
+}

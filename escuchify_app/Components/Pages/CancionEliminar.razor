@@ -1,0 +1,51 @@
+@page "/canciones/eliminar/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h1>Eliminar Canción</h1>
+
+@if (cancion == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <div class="alert alert-danger">
+        ¿Está seguro de eliminar la canción <strong>@cancion.Titulo</strong>?
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-danger" @onclick="Eliminar">Confirmar</button>
+        <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Cancion? cancion;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            cancion = await HttpClient.GetFromJsonAsync<Cancion>($"http://localhost:5126/canciones/{Id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task Eliminar()
+    {
+        await HttpClient.DeleteAsync($"http://localhost:5126/canciones/{Id}");
+        NavigationManager.NavigateTo("/canciones");
+    }
+
+    // Método para evitar el error de comillas en el HTML
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/canciones");
+    }
+}

@@ -1,0 +1,96 @@
+﻿@page "/"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+
+<PageTitle>Escuchify - Inicio</PageTitle>
+
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">Bienvenido a Escuchify</h1>
+    <p class="lead">Tu gestor de música personal.</p>
+</div>
+
+<div class="row">
+    
+    <div class="col-md-4">
+        <div class="card text-center mb-4 shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h4 class="my-0 fw-normal">Artistas</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">@cantidadArtistas</h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Bandas e Intérpretes</li>
+                    <li>Registrados en el sistema</li>
+                </ul>
+                <a href="/artistas" class="w-100 btn btn-lg btn-outline-primary">Ver Artistas</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center mb-4 shadow-sm border-success">
+            <div class="card-header bg-success text-white">
+                <h4 class="my-0 fw-normal">Discos</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">@cantidadDiscos</h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Álbumes y EPs</li>
+                    <li>Disponibles para escuchar</li>
+                </ul>
+                <a href="/discos" class="w-100 btn btn-lg btn-outline-success">Ver Discos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-center mb-4 shadow-sm border-info">
+            <div class="card-header bg-info text-white">
+                <h4 class="my-0 fw-normal">Canciones</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">@cantidadCanciones</h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Tracks individuales</li>
+                    <li>Listos para reproducir</li>
+                </ul>
+                <a href="/canciones" class="w-100 btn btn-lg btn-outline-info">Ver Canciones</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private int cantidadArtistas = 0;
+    private int cantidadDiscos = 0;
+    private int cantidadCanciones = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEstadisticas();
+    }
+
+    private async Task CargarEstadisticas()
+    {
+        try
+        {
+            // Hacemos las peticiones para contar los elementos
+            // Nota: Esto trae todos los datos. En una app real haríamos un endpoint específico "/count"
+            // pero para este proyecto está bien así.
+            
+            var artistas = await HttpClient.GetFromJsonAsync<Artista[]>("http://localhost:5126/artistas");
+            cantidadArtistas = artistas?.Length ?? 0;
+
+            var discos = await HttpClient.GetFromJsonAsync<Disco[]>("http://localhost:5126/discos");
+            cantidadDiscos = discos?.Length ?? 0;
+
+            var canciones = await HttpClient.GetFromJsonAsync<Cancion[]>("http://localhost:5126/canciones");
+            cantidadCanciones = canciones?.Length ?? 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando estadísticas: {ex.Message}");
+        }
+    }
+}

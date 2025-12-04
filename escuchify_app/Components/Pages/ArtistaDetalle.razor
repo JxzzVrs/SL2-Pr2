@@ -1,0 +1,84 @@
+@page "/artistas/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalle de Artista</PageTitle>
+    
+<h1>Detalle del Artista</h1>
+
+@if (artista == null)
+{
+    <p><em>Cargando detalle del artista...</em></p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">@artista.Id</dd>
+
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@artista.Nombre</dd>
+
+        <dt class="col-sm-3">Nacionalidad</dt>
+        <dd class="col-sm-9">@artista.Nacionalidad</dd>
+
+        <dt class="col-sm-3">Género Principal</dt>
+        <dd class="col-sm-9">@artista.GeneroPrincipal</dd>
+        
+        <dt class="col-sm-3">Biografía</dt>
+        <dd class="col-sm-9">@artista.Biografia</dd>
+    </dl>
+
+    @if (artista.Discos != null && artista.Discos.Any())
+    {
+        <h3>Discos Asociados</h3>
+        <ul>
+            @foreach (var disco in artista.Discos)
+            {
+                <li>@disco.Titulo (@disco.AnioLanzamiento)</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p><em>No hay discos asociados a este artista.</em></p>
+    }
+
+    <div class="mb-3 mt-3">
+        <button class="btn btn-warning" @onclick="() => EditarArtista()">
+            Editar
+        </button>
+        <button class="btn btn-secondary" @onclick="() => VolverALista()">
+            Volver a la lista
+        </button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Artista? artista;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadArtista();
+    }
+
+    private async Task LoadArtista()
+    {
+        // URL corregida (sin /api) apuntando a tu backend
+        artista = await HttpClient.GetFromJsonAsync<Artista>($"http://localhost:5126/artistas/{Id}");
+    }
+
+    private void VolverALista()
+    {
+        NavigationManager.NavigateTo(uri: "/artistas");
+    }
+
+    private void EditarArtista()
+    {
+        NavigationManager.NavigateTo($"/artistas/editar/{Id}");
+    }
+}

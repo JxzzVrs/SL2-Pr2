@@ -1,0 +1,97 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = escuchify_app
+build_property.RootNamespace = escuchify_app
+build_property.ProjectDir = C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/ArtistaDetalle.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBcnRpc3RhRGV0YWxsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/ArtistaEliminar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBcnRpc3RhRWxpbWluYXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/CancionDetalle.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYW5jaW9uRGV0YWxsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/CancionEliminar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYW5jaW9uRWxpbWluYXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/DiscoDetalle.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEaXNjb0RldGFsbGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/DiscoEliminar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEaXNjb0VsaW1pbmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/FrmArtista.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGcm1BcnRpc3RhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/FrmCancion.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGcm1DYW5jaW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/FrmDisco.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGcm1EaXNjby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/ListArtistas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaXN0QXJ0aXN0YXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/ListCanciones.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaXN0Q2FuY2lvbmVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Pages/ListDiscos.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMaXN0RGlzY29zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-rq8hivdgpp
+
+[C:/Users/jesic/OneDrive/Documentos/2doAnoFCEQyN/2doCuatri/SEMINARIO_II/Pr2-Escuchify2.0/escuchify_app/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-b8i4w1spt3
