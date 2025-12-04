@@ -36,7 +36,7 @@ public class ArtistasController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Artista>> PostArtista(Artista artista)
     {
-        // VALIDACIÓN: Nombre duplicado (Esta la mantenemos porque es útil y no usa Helpers)
+        // VALIDACIÓN: Nombre duplicado 
         var existeNombre = await _context.Artistas
             .AnyAsync(a => a.Nombre.ToLower() == artista.Nombre.ToLower());
 
@@ -44,8 +44,6 @@ public class ArtistasController : ControllerBase
         {
             return BadRequest($"El artista '{artista.Nombre}' ya existe.");
         }
-
-        // ELIMINADO: Validación de género con ListadoGeneros
 
         _context.Artistas.Add(artista);
         await _context.SaveChangesAsync();
@@ -60,8 +58,6 @@ public class ArtistasController : ControllerBase
 
         var artistaExistente = await _context.Artistas.FindAsync(id);
         if (artistaExistente == null) return NotFound();
-
-        // ELIMINADO: Validación de género con ListadoGeneros
 
         artistaExistente.Nombre = artista.Nombre;
         artistaExistente.Nacionalidad = artista.Nacionalidad;

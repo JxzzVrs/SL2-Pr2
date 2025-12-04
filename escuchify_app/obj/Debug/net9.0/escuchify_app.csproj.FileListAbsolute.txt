@@ -76,3 +76,4 @@ C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuc
 C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app\obj\Debug\net9.0\escuchify_app.genruntimeconfig.cache
 C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app\obj\Debug\net9.0\ref\escuchify_app.dll
 C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app\obj\Debug\net9.0\compressed\3pm4xh12kw-myvbk5dqri.gz
+C:\Users\jesic\OneDrive\Documentos\2doAnoFCEQyN\2doCuatri\SEMINARIO_II\Pr2-Escuchify2.0\escuchify_app\obj\Debug\net9.0\escuchify_app.sourcelink.json

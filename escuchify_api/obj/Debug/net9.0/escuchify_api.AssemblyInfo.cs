@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("escuchify_api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a98c167a1af084e52522b6bbeb6b474b70eb8838")]
 [assembly: System.Reflection.AssemblyProductAttribute("escuchify_api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("escuchify_api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

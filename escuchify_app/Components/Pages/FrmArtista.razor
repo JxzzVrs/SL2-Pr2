@@ -16,7 +16,7 @@
 }
 else
 {
-     <EditForm Model="artista" OnValidSubmit="GuardarArtista" FormName="artistaForm">
+     <EditForm Model="artista" onSubmit="GuardarArtista" FormName="artistaForm">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -66,31 +66,41 @@ else
         }
     }
 
-    private async Task GuardarArtista()
+private async Task GuardarArtista()
     {
+        Console.WriteLine("--- INTENTO DE GUARDADO ---");
+
         HttpResponseMessage response;
-        
-        // Determinar si es POST (nuevo) o PUT (editar)
+
+        // IMPORTANTE: Asegúrate de que esta URL coincida con tu API
+        // A veces la barra al final "/" causa error 400, así que la quitamos por seguridad
+        string urlBase = "http://localhost:5126/artistas"; 
+
         if (Id == 0)
         {
-            // POST: Crear nuevo
-            response = await HttpClient.PostAsJsonAsync(requestUri: "http://localhost:5126/artistas/", artista);
+            Console.WriteLine($"Enviando POST (Nuevo) a: {urlBase}");
+            response = await HttpClient.PostAsJsonAsync(urlBase, artista);
         }
         else
         {
-            // PUT: Actualizar existente
-            response = await HttpClient.PutAsJsonAsync(requestUri: $"http://localhost:5126/artistas/{Id}", artista);
+            Console.WriteLine($"Enviando PUT (Editar) a: {urlBase}/{Id}");
+            response = await HttpClient.PutAsJsonAsync($"{urlBase}/{Id}", artista);
         }
 
+        // AQUÍ ESTÁ LA MAGIA PARA VER EL ERROR
         if (response.IsSuccessStatusCode)
         {
-            // Redirigir a la lista al tener éxito
-            NavigationManager.NavigateTo(uri: "/artistas");
+            Console.WriteLine("¡ÉXITO! Guardado correctamente.");
+            NavigationManager.NavigateTo("/artistas");
         }
         else
         {
-            // Manejo de errores simple (puedes expandir esto)
-            Console.WriteLine($"Error al guardar el artista: {response.StatusCode}");
+            // Esto lee el mensaje oculto que manda la API
+            var errorDetallado = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine($"❌ ERROR {response.StatusCode}:");
+            Console.WriteLine($"MENSAJE: {errorDetallado}");
+            Console.WriteLine("------------------------------------------------");
         }
     }
 

@@ -9,5 +9,5 @@ public class Artista
     public string? GeneroPrincipal { get; set; } // Género musical principal
     
     // Relación 1 a N con Disco
-    public List<Disco> Discos { get; set; } = new List<Disco>(); 
+    public List<Disco>? Discos { get; set; } = new List<Disco>(); 
 }
