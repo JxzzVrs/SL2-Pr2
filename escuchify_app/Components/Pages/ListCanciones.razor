@@ -1,0 +1,135 @@
+@page "/canciones"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Canciones</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold m-0" style="color: var(--text-main);">Canciones</h2>
+        <small class="text-muted">Lista completa de tracks</small>
+    </div>
+    <a class="btn btn-primary rounded-pill px-4" href="/canciones/nuevo">
+        <i class="bi bi-plus-lg me-2"></i>Nueva Canción
+    </a>
+</div>
+
+@if (canciones == null)
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Cargando canciones...</p>
+    </div>
+}
+else if (canciones.Length == 0)
+{
+    <div class="alert alert-secondary border-0" style="background-color: var(--bg-card);">
+        <i class="bi bi-music-note-beamed me-2"></i> No hay canciones registradas.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" style="border-collapse: separate; border-spacing: 0;">
+            <thead>
+                <tr class="text-uppercase text-muted small border-bottom-0">
+                    <th scope="col">Título</th>
+                    <th scope="col">Álbum</th>
+                    <th scope="col">Género</th>
+                    <th scope="col"><i class="bi bi-clock"></i></th>
+                    <th scope="col" class="text-end pe-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cancion in canciones)
+                {
+                    <tr class="track-row">
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-bold text-white">@cancion.Titulo</span>
+                                @* Mostramos el artista debajo del título (Estilo Spotify) *@
+                                @if (cancion.Disco?.Artista != null)
+                                {
+                                    <small class="text-muted" style="font-size: 0.8rem;">@cancion.Disco.Artista.Nombre</small>
+                                }
+                            </div>
+                        </td>
+                        <td class="text-muted">@(cancion.Disco?.Titulo ?? "-")</td>
+                        <td class="text-muted">@cancion.Genero</td>
+                        <td class="text-muted font-monospace">@cancion.Duracion</td>
+                        
+                        <td class="text-end pe-3">
+                            <div class="btn-group">
+                                <button class="btn btn-icon" title="Ver Detalle" @onclick="() => VerCancion(cancion.Id)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-icon" title="Editar" @onclick="() => EditarCancion(cancion.Id)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-icon text-danger" title="Eliminar" @onclick="() => EliminarCancion(cancion.Id)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<style>
+    .track-row {
+        transition: background-color 0.2s;
+        border-radius: 4px;
+    }
+    .track-row:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .btn-icon {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        transition: all 0.2s;
+        padding: 0.25rem 0.5rem;
+        font-size: 1.1rem;
+    }
+    .btn-icon:hover {
+        color: var(--text-main);
+        transform: scale(1.1);
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 50%;
+    }
+    .btn-icon.text-danger:hover {
+        color: #ef4444 !important;
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+</style>
+
+@code {
+    private Cancion[]? canciones;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCanciones();
+    }
+
+    private async Task LoadCanciones()
+    {
+        try
+        {
+            canciones = await HttpClient.GetFromJsonAsync<Cancion[]>("http://localhost:5126/canciones");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+    
+    private void VerCancion(int id) => NavigationManager.NavigateTo($"/canciones/{id}");
+    private void EditarCancion(int id) => NavigationManager.NavigateTo($"/canciones/editar/{id}");
+    private void EliminarCancion(int id) => NavigationManager.NavigateTo($"/canciones/eliminar/{id}");
+}

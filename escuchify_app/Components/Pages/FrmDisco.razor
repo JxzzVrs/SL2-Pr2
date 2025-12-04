@@ -1,0 +1,132 @@
+﻿@page "/discos/nuevo"
+@page "/discos/editar/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>@(Id == 0 ? "Nuevo Disco" : "Editar Disco")</PageTitle>
+    
+<h1>@(Id == 0 ? "Crear Nuevo Disco" : "Editar Disco")</h1>
+
+@* Esperamos a que se carguen los datos para evitar errores de null *@
+@if (disco == null || artistas == null)
+{
+    <p><em>Cargando formulario...</em></p>
+}
+else
+{
+     <EditForm Model="disco" OnValidSubmit="GuardarDisco" FormName="discoForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <InputText id="titulo" class="form-control" @bind-Value="disco.Titulo" />
+        </div>
+
+        <div class="mb-3">
+            <label for="anioLanzamiento" class="form-label">Año de Lanzamiento</label>
+            <InputNumber id="anioLanzamiento" class="form-control" @bind-Value="disco.AnioLanzamiento" />
+        </div>
+
+        <div class="mb-3">
+            <label for="tipoDisco" class="form-label">Tipo de Disco</label>
+            <InputText id="tipoDisco" class="form-control" @bind-Value="disco.TipoDisco" />
+        </div>
+
+        <div class="mb-3">
+            <label for="artista" class="form-label">Artista</label>
+            <InputSelect id="artista" class="form-control" @bind-Value="disco.ArtistaId">
+                @* IMPORTANTE: Usamos value="0" porque ArtistaId es un int. 
+                   value="" causaría un error de conversión. *@
+                <option value="0">-- Seleccione un Artista --</option>
+                @foreach (var artista in artistas)
+                {
+                    <option value="@artista.Id">@artista.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+        </div>
+        
+    </EditForm> 
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+
+    private Disco disco { get; set; } = new Disco();
+    private Artista[]? artistas; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        try 
+        {
+            // 1. Cargar lista de artistas (URL sin /api)
+            artistas = await HttpClient.GetFromJsonAsync<Artista[]>("http://localhost:5126/artistas");
+
+            // 2. Si es edición, cargar el disco
+            if (Id > 0)
+            {
+                disco = await HttpClient.GetFromJsonAsync<Disco>($"http://localhost:5126/discos/{Id}") ?? new Disco();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando datos: {ex.Message}");
+        }
+    }
+
+    private async Task GuardarDisco()
+    {
+        Console.WriteLine($"Intentando guardar disco: {disco.Titulo}, ArtistaId: {disco.ArtistaId}");
+
+        // Validación manual: Si el usuario dejó la opción "-- Seleccione --" (valor 0)
+        if (disco.ArtistaId == 0)
+        {
+            Console.WriteLine("VALIDACIÓN FALLIDA: No se seleccionó ningún artista.");
+            // Aquí podrías agregar una lógica para mostrar un mensaje en pantalla si quieres
+            return; 
+        }
+
+        HttpResponseMessage response;
+        try
+        {
+            if (Id == 0)
+            {
+                // POST: Crear nuevo
+                response = await HttpClient.PostAsJsonAsync("http://localhost:5126/discos/", disco);
+            }
+            else
+            {
+                // PUT: Actualizar
+                response = await HttpClient.PutAsJsonAsync($"http://localhost:5126/discos/{Id}", disco);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Guardado exitoso. Redirigiendo...");
+                NavigationManager.NavigateTo("/discos");
+            }
+            else
+            {
+                var errorMsg = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"ERROR API ({response.StatusCode}): {errorMsg}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"EXCEPCIÓN al guardar: {ex.Message}");
+        }
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/discos");
+    }
+}

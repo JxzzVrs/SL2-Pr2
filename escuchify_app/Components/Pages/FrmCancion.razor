@@ -1,0 +1,99 @@
+@page "/canciones/nuevo"
+@page "/canciones/editar/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>@(Id == 0 ? "Nueva Canción" : "Editar Canción")</PageTitle>
+    
+<h1>@(Id == 0 ? "Crear Nueva Canción" : "Editar Canción")</h1>
+
+@if (cancion == null || discos == null)
+{
+    <p><em>Cargando formulario...</em></p>
+}
+else
+{
+     <EditForm Model="cancion" OnValidSubmit="GuardarCancion">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <InputText id="titulo" class="form-control" @bind-Value="cancion.Titulo" />
+        </div>
+
+        <div class="mb-3">
+            <label for="duracion" class="form-label">Duración</label>
+            <InputText id="duracion" class="form-control" @bind-Value="cancion.Duracion" placeholder="Ej: 3:45" />
+        </div>
+
+        <div class="mb-3">
+            <label for="genero" class="form-label">Género</label>
+            <InputText id="genero" class="form-control" @bind-Value="cancion.Genero" />
+        </div>
+
+        @* --- Selector de Disco --- *@
+        <div class="mb-3">
+            <label for="disco" class="form-label">Disco (Álbum)</label>
+            <InputSelect id="disco" class="form-control" @bind-Value="cancion.DiscoId">
+                <option value="0">-- Seleccione un Disco --</option>
+                @foreach (var disco in discos)
+                {
+                    <option value="@disco.Id">@disco.Titulo</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+        </div>
+    </EditForm> 
+}
+
+@code {
+    [Parameter] public int Id { get; set; } = 0;
+
+    private Cancion cancion { get; set; } = new Cancion();
+    private Disco[]? discos; // Lista para el desplegable
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 1. Cargar lista de discos
+        discos = await HttpClient.GetFromJsonAsync<Disco[]>("http://localhost:5126/discos");
+
+        // 2. Si editamos, cargar la canción
+        if (Id > 0)
+        {
+            cancion = await HttpClient.GetFromJsonAsync<Cancion>($"http://localhost:5126/canciones/{Id}") ?? new Cancion();
+        }
+    }
+
+    private async Task GuardarCancion()
+    {
+        if (cancion.DiscoId == 0) return; // Validación simple
+
+        HttpResponseMessage response;
+        if (Id == 0)
+        {
+            response = await HttpClient.PostAsJsonAsync("http://localhost:5126/canciones/", cancion);
+        }
+        else
+        {
+            response = await HttpClient.PutAsJsonAsync($"http://localhost:5126/canciones/{Id}", cancion);
+        }
+
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/canciones");
+        }
+        else
+        {
+            Console.WriteLine($"Error al guardar: {response.StatusCode}");
+        }
+    }
+
+    private void Cancelar() => NavigationManager.NavigateTo("/canciones");
+}

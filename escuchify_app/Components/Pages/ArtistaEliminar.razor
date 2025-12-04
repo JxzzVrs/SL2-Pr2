@@ -1,0 +1,79 @@
+@page "/artistas/eliminar/{Id:int}"
+@using escuchify_app.Components.Models
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminación de Artista</PageTitle>
+    
+<h1>Eliminar Artista</h1>
+
+@if (artista == null)
+{
+    <p><em>Cargando datos para eliminación...</em></p>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        ¿Está seguro de que desea eliminar al artista <strong>@artista.Nombre</strong>?
+        <br>
+        <em>Esta acción no se puede deshacer.</em>
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">@artista.Id</dd>
+
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@artista.Nombre</dd>
+
+        <dt class="col-sm-3">Nacionalidad</dt>
+        <dd class="col-sm-9">@artista.Nacionalidad</dd>
+    </dl>
+
+    <div class="mb-3">
+        <button class="btn btn-danger" @onclick="() => EliminarArtista()">
+            Confirmar Eliminación
+        </button>
+        <button class="btn btn-secondary" @onclick="() => VolverALista()">
+            Cancelar
+        </button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Artista? artista;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadArtista();
+    }
+
+    private async Task LoadArtista()
+    {
+        // Carga los datos para mostrar qué se va a eliminar
+        artista = await HttpClient.GetFromJsonAsync<Artista>($"http://localhost:5126/artistas/{Id}");
+    }
+
+    private void VolverALista()
+    {
+        NavigationManager.NavigateTo(uri: "/artistas");
+    }
+
+    private async Task EliminarArtista()
+    {
+        // Llama al endpoint DELETE
+        var response = await HttpClient.DeleteAsync(requestUri: $"http://localhost:5126/artistas/{Id}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo(uri: "/artistas");
+        }
+        else
+        {
+            Console.WriteLine($"Error al eliminar. Código: {response.StatusCode}");
+        }
+    }
+}
